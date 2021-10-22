@@ -1,5 +1,13 @@
 #!/bin/sh
 
+err() {
+	while true; do
+		sleep 1
+	done
+}
+
+grep -w boot /proc/cmdline || err
+
 . /etc/profile
 
 DEVID="$(cat /sys/class/dmi/id/product_uuid)"
@@ -29,7 +37,7 @@ EOF
 		fscrypt encrypt "$(eval echo ~$UNLOCKER)"
 		;;
 	*)
-		echo "$DEVID$DISKID" | fscrypt unlock "$(eval echo ~$UNLOCKER)"
+		echo "$DEVID$DISKID" | fscrypt unlock "$(eval echo ~$UNLOCKER)" || err
 		;;
 esac
 
