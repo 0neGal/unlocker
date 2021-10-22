@@ -4,6 +4,6 @@
 
 DEVID="$(cat /sys/class/dmi/id/product_uuid)"
 ROOT="$(df | grep -E '/$' | awk '{ print $1 }')"
-DISKID="$(blkid | grep $ROOT | awk '{print $2 }' | sed -e 's/UUID="//g' -e 's/"//g')"
+DISKID="$(blkid | grep "$ROOT" | awk '{print $2 }' | sed -e 's/UUID="//g' -e 's/"//g')"
 
-echo $DEVID$DISKID | fscrypt unlock $(eval echo ~$UNLOCKER)
+echo "$DEVID$DISKID" | fscrypt unlock "$(eval echo ~$UNLOCKER)"
