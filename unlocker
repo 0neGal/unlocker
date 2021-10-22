@@ -6,4 +6,30 @@ DEVID="$(cat /sys/class/dmi/id/product_uuid)"
 ROOT="$(df | grep -E '/$' | awk '{ print $1 }')"
 DISKID="$(blkid | grep "$ROOT" | awk '{print $2 }' | sed -e 's/UUID="//g' -e 's/"//g')"
 
-echo "$DEVID$DISKID" | fscrypt unlock "$(eval echo ~$UNLOCKER)"
+case $1 in
+	"--help")
+		cat <<EOF
+Usage: $0 [option]
+    --help
+        Shows this lovely help message
+    --print
+        Prints the device password
+    --encrypt
+        Attempts to encrypt \$UNLOCKER
+
+    anything else
+        Attempts to unlock \$UNLOCKER
+EOF
+		;;
+	"--print")
+		echo "$DEVID$DISKID"
+		;;
+	"--encrypt")
+		echo Use Password: $($0 --print)
+		fscrypt encrypt "$(eval echo ~$UNLOCKER)"
+		;;
+	*)
+		echo "$DEVID$DISKID" | fscrypt unlock "$(eval echo ~$UNLOCKER)"
+		;;
+esac
+
