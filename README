@@ -1,0 +1,47 @@
+A simple script that gives your device security through obscurity.
+
+In short, when you run unlocker, it decrypts a home folder, designated
+by the $UNLOCKER variable set in /etc/profile or a derivative. It'll
+then use the root partition's UUID and device UUID together as the
+password, aka you'll need to encrypt the home directory of the user with
+fscrypt beforehand, you can use "unlocker --print" to get the password.
+
+Simply run "unlocker" before the user in question has signed in. And if
+everything is set up correctly it'll work properly.
+
+Furthermore, with the theme of security through obscurity, if "boot"
+isn't in the arguments/cmdline when booting it will cease to unlock the
+folder. And if you run the script in a nice manor that'll also cease the
+rest of the system. In case of s6, if you simply put the script inside
+"/etc/local.d" and name it "unlocker.start", you'll never be able to
+boot unless the argument is present and the folder can be decrypted.
+
+With all this in mind, if somebody were to try and boot your drive on a
+different machine, clone your disk or alike it may very well just never
+boot, and it'll definitely never unlock as the device UUID is not the
+same. You'd have to already know the UUID of the device have the
+partition UUID be cloned as well and so on.
+
+
+Furthermore.... If you're using a corebooted device if one were to steal
+your device and it had GRUB flashed on it it'd never boot any disk but
+yours hence your machine would be rather useless unless the thief is
+capable of reflashing your BIOS chip (doubt it.)
+
+I should note this isn't that secure if the attacker knows of this tool,
+which is why I debated on even publishing the tool in the first place. I
+might make the cmdline argument customizable, the UUID's and alike
+possible to change how they're gathered etc, to make it more your own
+and harder to reverse engineer, my point is, this is not the most secure
+system however it will protect you from your average thief.
+
+
+I've also yet to quite make "unlocker --encrypt" work properly, I'd love
+to automate the process completely, instead of having to manually fill
+out everything. Which is quite tedious, especially if you're doing it
+from the TTY, which you might be doing since you obviously can't be
+logged into the user when encrypting the home folder.
+
+
+
+I may or may not update this tool/script down the line, who knows.
