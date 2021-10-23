@@ -55,10 +55,10 @@ consistency. Current settings include:
     The message that'll be printed to tty1 when an error occurs
 
   UNLOCKER_BOOTARGS
-	The arguments that'll be checked for in /proc/cmdline, arguments in
-	plural, as you can check for multiple arguments and not just one
-	separate the arguments with a space, example: "boot decrypt", will
-	check for "decrypt" and "boot" as separate words/arguments.
+    The arguments that'll be checked for in /proc/cmdline, arguments in
+    plural, as you can check for multiple arguments and not just one
+    separate the arguments with a space, example: "boot decrypt", will
+    check for "decrypt" and "boot" as separate words/arguments.
 
 
 More settings are to come...
