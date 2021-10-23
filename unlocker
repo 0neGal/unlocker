@@ -7,7 +7,7 @@ err() {
 	done
 }
 
-grep -w boot /proc/cmdline || err
+grep -wq boot /proc/cmdline || err
 
 . /etc/profile
 
