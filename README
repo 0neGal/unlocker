@@ -54,6 +54,14 @@ consistency. Current settings include:
   UNLOCKER_ERRMSG
     The message that'll be printed to tty1 when an error occurs
 
+  UNLOCKER_BOOTARGS
+    The arguments that'll be checked for in /proc/cmdline, arguments in
+    plural, as, since it uses grep, with extended regEx you can do
+    multiple arguments by separating them with a pipe, example:
+    "boot|decrypt", will check for "decrypt" and "boot" as separate
+    words/arguments.
+
+
 More settings are to come...
 
 Notice
