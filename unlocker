@@ -1,19 +1,16 @@
 #!/bin/sh
 
-err() {
-	echo "cannot boot, whoops..."
-	while true; do
-		sleep 1
-	done
-}
-
-grep -wq boot /proc/cmdline || err
-
 . /etc/profile
 
-DEVID="$(cat /sys/class/dmi/id/product_uuid)"
-ROOT="$(df | grep -E '/$' | awk '{ print $1 }')"
-DISKID="$(blkid | grep "$ROOT" | awk '{print $2 }' | sed -e 's/UUID="//g' -e 's/"//g')"
+err() {
+	echo "cannot boot, whoops..."
+	while true; do sleep 1; done
+}; grep -wq "boot" /proc/cmdline || err
+
+ROOT_PART="$(df | grep -E '/$' | awk '{ print $1 }')"
+
+DEVICE_UUID="$(cat /sys/class/dmi/id/product_uuid)"
+PART_UUID="$(blkid | grep "$ROOT_PART" | awk '{print $2 }' | sed -e 's/UUID="//g' -e 's/"//g')"
 
 case $1 in
 	"--help")
@@ -31,14 +28,13 @@ Usage: $0 [option]
 EOF
 		;;
 	"--print")
-		echo "$DEVID$DISKID"
+		echo "$DEVICE_UUID$PART_UUID"
 		;;
 	"--encrypt")
 		echo Use Password: $($0 --print)
 		fscrypt encrypt "$(eval echo ~$UNLOCKER)"
 		;;
 	*)
-		echo "$DEVID$DISKID" | fscrypt unlock "$(eval echo ~$UNLOCKER)" || err
+		$0 --print | fscrypt unlock "$(eval echo ~$UNLOCKER)" || err
 		;;
 esac
-
