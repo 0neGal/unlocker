@@ -1,6 +1,7 @@
 #!/bin/sh
 
 err() {
+	echo "cannot boot, whoops..."
 	while true; do
 		sleep 1
 	done
