@@ -3,7 +3,7 @@
 . /etc/profile
 
 err() {
-	echo "cannot boot, whoops..."
+	echo "${UNLOCKER_ERRMSG:-err: can't boot}"
 	while true; do sleep 1; done
 }; grep -wq "boot" /proc/cmdline || err
 

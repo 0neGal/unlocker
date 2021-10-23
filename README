@@ -1,5 +1,8 @@
 A simple script that gives your device security through obscurity.
 
+Introduction
+============
+
 In short, when you run unlocker, it decrypts a home folder, designated
 by the $UNLOCKER variable set in /etc/profile or a derivative. It'll
 then use the root partition's UUID and device UUID together as the
@@ -35,6 +38,26 @@ possible to change how they're gathered etc, to make it more your own
 and harder to reverse engineer, my point is, this is not the most secure
 system however it will protect you from your average thief.
 
+
+Settings
+========
+
+Inside your "/etc/profile" you can set variables which will then be the
+settings for unlocker, all variables are prefixed with UNLOCKER, for
+consistency. Current settings include:
+
+  UNLOCKER
+    The user of which unlocker will try to unlock their home directory,
+    it's not limited to users using /home, aka root can be set, as it
+    gets the path and doesn't assume.
+
+  UNLOCKER_ERRMSG
+    The message that'll be printed to tty1 when an error occurs
+
+More settings are to come...
+
+Notice
+======
 
 I've also yet to quite make "unlocker --encrypt" work properly, I'd love
 to automate the process completely, instead of having to manually fill
