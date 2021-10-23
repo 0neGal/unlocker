@@ -5,7 +5,11 @@
 err() {
 	echo "${UNLOCKER_ERRMSG:-err: can't boot}"
 	while true; do sleep 1; done
-}; grep -Ewq "${UNLOCKER_BOOTARGS:-boot}" /proc/cmdline || err
+}
+
+for i in ${UNLOCKER_BOOTARGS:-boot}; do
+	grep -wq "$i" /proc/cmdline || err
+done
 
 ROOT_PART="$(df | grep -E '/$' | awk '{ print $1 }')"
 
