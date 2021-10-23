@@ -3,7 +3,7 @@
 . /etc/profile
 
 err() {
-	echo "${UNLOCKER_ERRMSG:-err: can't boot}"
+	echo "${UNLOCKER_ERRMSG:-"err: can't boot"}"
 	while true; do sleep 1; done
 }
 
