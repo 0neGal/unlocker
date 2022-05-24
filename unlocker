@@ -29,7 +29,7 @@ BIOS_VENDOR="$(cat /sys/class/dmi/id/bios_vendor)"
 BOARD_VENDOR="$(cat /sys/class/dmi/id/board_vendor)"
 DEVICE_UUID="$(cat /sys/class/dmi/id/product_uuid)"
 DISK_UUID="$(fdisk -l /dev/$ROOT_DISK | grep 'Disk identifier' | awk '{ print $3 }')"
-PART_UUID="$(blkid | grep "$ROOT_PART" | awk '{print $2 }' | sed -e 's/UUID="//g' -e 's/"//g')"
+PART_UUID="$(blkid -o export $ROOT_PART | grep -E "^UUID" | sed -e 's/UUID=//g' -e 's/"//g')"
 
 case $1 in
 	"--help")
