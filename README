@@ -5,9 +5,10 @@ Introduction
 
 In short, when you run unlocker, it decrypts a home folder, designated
 by the $UNLOCKER variable set in /etc/profile or a derivative. It'll
-then use the root partition's UUID and device UUID together as the
-password, aka you'll need to encrypt the home directory of the user with
-fscrypt beforehand, you can use "unlocker --print" to get the password.
+then use the device specific ID's (see $UNLOCKER_PASS for more) to
+generate the password, aka you'll need to encrypt the home directory of
+the user with fscrypt beforehand, you can use "unlocker --print" to get
+the password.
 
 Simply run "unlocker" before the user in question has signed in. And if
 everything is set up correctly it'll work properly.
@@ -32,12 +33,28 @@ yours hence your machine would be rather useless unless the thief is
 capable of reflashing your BIOS chip (doubt it.)
 
 I should note this isn't that secure if the attacker knows of this tool,
-which is why I debated on even publishing the tool in the first place. I
-might make the cmdline argument customizable, the UUID's and alike
-possible to change how they're gathered etc, to make it more your own
-and harder to reverse engineer, my point is, this is not the most secure
-system however it will protect you from your average thief.
+which is why I debated on even publishing the tool in the first place,
+this is not the most secure system however it will protect you from your
+average thief.
 
+Overall this is meant to add security through obscurity, and I would
+urge you to name the script in a manner that's not suspicious, as an
+example don't call the service file "disk-unlocker" or similar, and
+don't use the default settings.
+
+The whole idea of this script is to encrypt your disk but without adding
+a bunch of passwords before you can use your machine, not only that but
+so that you don't have to look at an ugly TTY prompt. You should
+understand what this tool does and doesn't do, and understand how this
+does and doesn't protect you before assuming your machine is the
+pentagon level of secure.
+
+I would however like to point out that if a thief were to only take your
+hard disk, and never write down all the needed info for your drive
+they'd never get anything from your home folder since that's encrypted.
+
+I expect that since you'd read all of the above you realize how this
+tool works and what not, feel free to use it!
 
 Settings
 ========
@@ -51,15 +68,31 @@ consistency. Current settings include:
     it's not limited to users using /home, aka root can be set, as it
     gets the path and doesn't assume.
 
+  UNLOCKER_TPUT
+    The tput command run before displaying the ERRMSG
+
+    Default: setaf 1
+
+  UNLOCKER_PASS
+	The format for the password, this allows you to change how the
+	password is generated.
+
+	Default: %deviceid-%partid-%bname-%bios-%vendor
+
+	Values:
+	  %deviceid - Disk UUID
+	  %partid   - Partition UUID
+
+	  %vendor   - Board Vendor (LENOVO/Dell etc)
+	  %bios     - BIOS Name (Dell/AMI/coreboot etc)
+	  %bname    - Board Name (typically device name)
+
+	  %unlocker - $UNLOCKER, i.e the user
+
   UNLOCKER_ERRMSG
     The message that'll be printed to tty1 when an error occurs
 
 	Default: err: can't boot
-
-  UNLOCKER_TPUT
-    The tput command run before displaying the ERRMSG
-
-	Default: setaf 1
 
   UNLOCKER_BOOTARGS
     The arguments that'll be checked for in /proc/cmdline, arguments in
