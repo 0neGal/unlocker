@@ -20,7 +20,13 @@ for i in ${UNLOCKER_BOOTARGS:-boot}; do
 done
 
 ROOT_PART="$(df | grep -E '/$' | awk '{ print $1 }')"
+ROOT_DISK="$(lsblk -o MOUNTPOINT,PKNAME | grep -E '^/ ' | awk '{ print $2 }')"
 
+UNLOCKER_PASS="${UNLOCKER_PASS:-%did-%pid-%bname-%bios-%vendor}"
+
+BOARD_NAME="$(cat /sys/class/dmi/id/board_name)"
+BIOS_VENDOR="$(cat /sys/class/dmi/id/bios_vendor)"
+BOARD_VENDOR="$(cat /sys/class/dmi/id/board_vendor)"
 DEVICE_UUID="$(cat /sys/class/dmi/id/product_uuid)"
 PART_UUID="$(blkid | grep "$ROOT_PART" | awk '{print $2 }' | sed -e 's/UUID="//g' -e 's/"//g')"
 
@@ -40,7 +46,13 @@ Usage: $0 [option]
 EOF
 		;;
 	"--print")
-		echo "$DEVICE_UUID$PART_UUID"
+		echo "$UNLOCKER_PASS" | \
+			sed "s/\%deviceid/$DEVICE_UUID/g" | \
+			sed "s/\%vendor/$BOARD_VENDOR/g" | \
+			sed "s/\%unlocker/$UNLOCKER/g" | \
+			sed "s/\%bios/$BIOS_VENDOR/g" | \
+			sed "s/\%bname/$BOARD_NAME/g" | \
+			sed "s/\%partid/$PART_UUID/g"
 		;;
 	"--encrypt")
 		echo Use Password: $($0 --print)
